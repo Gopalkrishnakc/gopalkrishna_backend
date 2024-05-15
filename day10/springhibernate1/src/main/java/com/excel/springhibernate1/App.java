@@ -24,6 +24,7 @@ public class App {
 //   Student get=dao.getStudent(1);
 //   System.out.println(get);
 //     Student delete=dao.deleteStudent(1);
-     
+      List<Student> students=dao.getAllStudents();
+     students.forEach(System.out::println);
 }
 }
