@@ -2,6 +2,8 @@ package com.excel.lms.dto;
 
 
 
+import com.excel.lms.enums.AddressType;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +17,7 @@ import lombok.Setter;
 @Builder
 public class EmployeeAddressInfoDto {
 	private Integer id;
-	private String addressType;
+	private AddressType addressType;
 	private String doorNo;
 	private String street;
 	private String locality;

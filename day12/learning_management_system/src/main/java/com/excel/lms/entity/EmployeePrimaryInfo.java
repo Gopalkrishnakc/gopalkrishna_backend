@@ -64,8 +64,8 @@ private EmployeeStatus employeeStatus;
 @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL,mappedBy = "employee")
 private List<EmployeeAddressInfo>address;
 
-@OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL,mappedBy = "employee")
-private List<EmployeeBankDetails>accounts;
+@OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "employee")
+private EmployeeBankDetails account;
 
 @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL,mappedBy = "employee")
 private List<EmployeeContact>contacts;

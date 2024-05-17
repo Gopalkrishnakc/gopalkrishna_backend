@@ -2,6 +2,8 @@ package com.excel.lms.dto;
 
 import java.time.LocalDate;
 
+import com.excel.lms.enums.EducationalType;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,7 +16,7 @@ import lombok.Setter;
 @Builder
 public class EmployeeEducationDetailsDto {
 	private Integer id;
-	private String educationType;
+	private EducationalType educationType;
 	private Double pecentage;
 	private String specilization;
 	private String instituteName;
