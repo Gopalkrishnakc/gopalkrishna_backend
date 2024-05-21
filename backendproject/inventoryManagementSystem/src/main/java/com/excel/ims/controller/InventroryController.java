@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.excel.ims.commomrespose.CommonResponse;
+import com.excel.ims.dto.InventoryItemsDto;
+import com.excel.ims.dto.PurchaseOrderItemsListDto;
+import com.excel.ims.dto.PurchaseOrderListDto;
 import com.excel.ims.dto.UserDto;
 import com.excel.ims.service.InventoryService;
 
@@ -47,6 +50,22 @@ public ResponseEntity<CommonResponse<UserDto>> updateEmployee(@RequestBody UserD
 	return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<UserDto>builder().data(updatedUser)
 			.isError(false).message("USER_UPDATE_SUCCESS").build());
    }
-
-
+   @PostMapping(path = "/orderlist")
+   ResponseEntity<CommonResponse<String>> orderAdd(@RequestBody PurchaseOrderListDto  dto){
+   	  String orderAdded=inventoryService.  orderAdd(dto);
+   	  return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<String>builder().data(orderAdded)
+   				.message("oordersAdded Successfull").isError(false).build());
+   }
+   @PostMapping(path = "/inventoryitems")
+   ResponseEntity<CommonResponse<String>> inventoryAdd(@RequestBody InventoryItemsDto dto){
+   	  String inventoryAdded=inventoryService.  inventoryAdd(dto);
+   	  return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<String>builder().data(inventoryAdded)
+   				.message("InventoryAdded Successfull").isError(false).build());
+   }
+//   @PostMapping(path = "/purchaseItems")
+//   ResponseEntity<CommonResponse<String>> orderItemsAdd(@RequestBody PurchaseOrderItemsListDto  dto){
+//   	  String orderItemsAdded=inventoryService.  orderItemsAdd(dto);
+//   	  return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<String>builder().data(orderItemsAdded)
+//   				.message("oordersAdded Successfull").isError(false).build());
+//   }
 }

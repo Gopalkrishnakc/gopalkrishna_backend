@@ -19,6 +19,6 @@ public class InventoryItemsDto {
 	private String category;
 	private String unitPrice;
 	private String quantityOnHand;
-	private String recderPoint;
+	private String reorderPoint;
 	private String createdAt;
 }
