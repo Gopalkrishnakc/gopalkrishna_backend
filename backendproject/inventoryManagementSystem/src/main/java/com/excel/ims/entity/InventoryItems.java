@@ -28,10 +28,10 @@ private Integer itemId;
 private String itemname;
 private String description;
 private String category;
-private String unit_price;
+private String unitPrice;
 private String quantityOnHand;
 private String reorderPoint;
-private String created_at;
+private String createdAt;
 @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "inventoryItems")
 private List<PurchaseOrderItems> purchaseOrdersItems;
 }

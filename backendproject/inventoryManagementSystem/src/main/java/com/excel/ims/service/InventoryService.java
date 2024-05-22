@@ -4,6 +4,7 @@ import com.excel.ims.dto.InventoryItemsDto;
 import com.excel.ims.dto.PurchaseOrderItemsListDto;
 import com.excel.ims.dto.PurchaseOrderListDto;
 import com.excel.ims.dto.UserDto;
+import com.excel.ims.entity.InventoryItems;
 
 public interface InventoryService {
 
@@ -19,7 +20,11 @@ public interface InventoryService {
 
 	String inventoryAdd(InventoryItemsDto dto);
 
-	String orderItemsAdd(PurchaseOrderItemsListDto dto);
+	Integer orderItemsAdd(PurchaseOrderItemsListDto dto);
+
+	InventoryItemsDto inventoryItemGet(InventoryItems dto);
+
+	InventoryItemsDto updateInventoryItems(InventoryItems dto);
 
 
 

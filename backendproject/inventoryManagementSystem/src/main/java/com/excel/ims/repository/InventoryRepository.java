@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.excel.ims.entity.InventoryItems;
 
 public interface InventoryRepository extends JpaRepository<InventoryItems, Integer> {
-	Optional<InventoryItems> findByItemname(String itemname);
+	Optional<InventoryItems> findByItemId(Integer itemId);
 
 }

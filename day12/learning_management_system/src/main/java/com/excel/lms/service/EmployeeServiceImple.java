@@ -157,7 +157,7 @@ public class EmployeeServiceImple implements EmployeeService {
 	}
 
 	public String saveTechnicalSkills(TechicalSkillsListDto dto) {
-		Optional<EmployeePrimaryInfo> empOptional	=employeeRepository.findByEmployeeId(dto.getEmployeeId());
+		Optional<EmployeePrimaryInfo> empOptional=employeeRepository.findByEmployeeId(dto.getEmployeeId());
 
 		if(empOptional.isPresent()) {
 			EmployeePrimaryInfo employee=empOptional.get();

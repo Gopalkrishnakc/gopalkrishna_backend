@@ -12,9 +12,10 @@ import lombok.Setter;
 @Builder
 public class UserDto {
 	private Integer userId;
-	private String userName;
+	private String username;
 	private String email;
 	private String password;
 	private boolean isAdmin;
 	private String createdAt;
+	
 }

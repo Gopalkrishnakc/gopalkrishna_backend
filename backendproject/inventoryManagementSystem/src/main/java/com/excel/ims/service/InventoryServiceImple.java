@@ -7,21 +7,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.excel.ims.dto.InventoryItemsDto;
+import com.excel.ims.dto.PurchaseOrderItemsListDto;
 import com.excel.ims.dto.PurchaseOrderListDto;
 import com.excel.ims.dto.UserDto;
 import com.excel.ims.entity.InventoryItems;
+import com.excel.ims.entity.PurchaseOrderItems;
 import com.excel.ims.entity.PurchaseOrders;
 import com.excel.ims.entity.User;
+import com.excel.ims.exception.NoUserFoundException;
 import com.excel.ims.repository.InventoryRepository;
+import com.excel.ims.repository.PurchaseOrderRepository;
 import com.excel.ims.repository.UserRepository;
 import com.excel.ims.utils.ObjectUtils;
 
 @Service
-public class InventorySErviceImple implements InventoryService {
+public class InventoryServiceImple implements InventoryService {
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
 	private InventoryRepository inventoryRepository;
+	@Autowired
+	private  PurchaseOrderRepository purchaseOrderRepository;
 
 	@Override
 	public String addUserInfo(UserDto dto) {
@@ -31,7 +37,7 @@ public class InventorySErviceImple implements InventoryService {
 			User user1=userRepository.save(user);
 			return user.getEmail();
 		}
-		return "user is already present";
+		 throw new  NoUserFoundException("USER_ALREDY_FOUND");
 	}
 
 	@Override
@@ -45,7 +51,7 @@ public class InventorySErviceImple implements InventoryService {
 	               return "Incorrect password";
 	           }
 	       }
-	       return "Invalid username"; 
+	       throw new  NoUserFoundException("INVALID_USER_NAME"); 
 	}
 
 	@Override
@@ -56,7 +62,7 @@ public class InventorySErviceImple implements InventoryService {
 			UserDto user1=ObjectUtils.userEntityToDto(user);
 			return user1;
 		}
-		return null;
+		 throw new  NoUserFoundException("NO_USER_FOUND");
 	}
 
 	@Override
@@ -68,7 +74,7 @@ public class InventorySErviceImple implements InventoryService {
 			User save=userRepository.save(user);
 			return ObjectUtils.userEntityToDto(save);
 		}
-		return null;
+		 throw new  NoUserFoundException("NO_Email_FOUND");
 	}
 
 	@Override
@@ -81,18 +87,60 @@ public class InventorySErviceImple implements InventoryService {
 			purchaseOrders.stream().forEach(x->x.setUserTable(user));
 			return userRepository.save(user).getEmail();
 		}
-		return null;
+		 throw new  NoUserFoundException("NO_ORDERS_FOUND");
 	}
 
 	@Override
 	public String inventoryAdd(InventoryItemsDto dto) {
-		if(!inventoryRepository.findByItemname(dto.getItemName()).isPresent()) {
+		if(!inventoryRepository.findByItemId(dto.getItemId()).isPresent()) {
 			InventoryItems items=ObjectUtils.itemsDtoToEntity(dto);
 			InventoryItems item=inventoryRepository.save(items);
 			return items.getItemname();
 		}
-		return "data is already present";
+		 throw new  NoUserFoundException("ITEM_ALREDAY_FOUND");
 	}
+
+	@Override
+	public Integer orderItemsAdd(PurchaseOrderItemsListDto dto) {
+		Optional<InventoryItems> inventoryOptional=inventoryRepository.findByItemId(dto.getItemId());
+		Optional<PurchaseOrders> orderOptional= purchaseOrderRepository.findBySupplier(dto.getSupplier());
+		if(inventoryOptional.isPresent()&& orderOptional.isPresent()) {
+			InventoryItems items=inventoryOptional.get();
+			PurchaseOrders orders=orderOptional.get();
+			List<PurchaseOrderItems> purchaseOrderItems=ObjectUtils.orderItemsDtoToEntity(dto.getOrderItems());
+			items.setPurchaseOrdersItems(purchaseOrderItems);
+			orders.setPurchaseOrdersItems(purchaseOrderItems);
+			 purchaseOrderItems.stream().forEach(x->x.setInventoryItems(items));
+			 purchaseOrderItems.stream().forEach(x->x.setPurchaseOrders(orders));
+			 PurchaseOrders orders1=purchaseOrderRepository.save(orders);
+			 return inventoryRepository.save(items).getItemId();
+		}
+		 throw new  NoUserFoundException("ITEM_NOT_FOUND");
+	}
+
+	@Override
+	public InventoryItemsDto inventoryItemGet(InventoryItems dto) {
+		Optional<InventoryItems>optional=inventoryRepository.findByItemId(dto.getItemId());
+		if(optional.isPresent()) {
+		InventoryItems items=optional.get();
+		InventoryItemsDto dtos=ObjectUtils.itemsEntityToDto(items);
+		return dtos;
+		}
+		 throw new  NoUserFoundException("DATA_NOT_FOUND");
+	}
+
+	@Override
+	public InventoryItemsDto updateInventoryItems(InventoryItems dto) {
+		Optional<InventoryItems>optional=inventoryRepository.findByItemId(dto.getItemId());
+		if(optional.isPresent()) {
+			InventoryItems item=optional.get();
+			item=ObjectUtils.updateValues(item,dto);
+			InventoryItems save=inventoryRepository.save(item);
+			return ObjectUtils.itemsEntityToDto(save);
+		} 
+		 throw new  NoUserFoundException("ITEM_NAME_NOT_FOUND");
+	}
+
 
 	
 

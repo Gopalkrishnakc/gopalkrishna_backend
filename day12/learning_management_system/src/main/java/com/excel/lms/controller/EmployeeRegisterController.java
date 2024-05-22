@@ -24,6 +24,7 @@ import com.excel.lms.dto.EmployeeBankDetailsDto;
 import com.excel.lms.dto.EmployeePrimaryInfoDto;
 import com.excel.lms.dto.EmployeeSecondaryInfoDto;
 import com.excel.lms.dto.ExpirenceListDto;
+import com.excel.lms.dto.TechicalSkillsListDto;
 import com.excel.lms.service.EmployeeService;
 
 @RestController
@@ -81,5 +82,13 @@ public class EmployeeRegisterController {
  		return  ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<String>builder().data(contacts)
  				.message(EMPLOYEE_CONTACTS_INFO_SAVED).isError(false).build()); 
  	}
+      @PostMapping(path = "/tech")
+  	public ResponseEntity<CommonResponse<String>> postTechnicalSkills(@RequestBody TechicalSkillsListDto dto  ){
+  		String employeeId=employeeService.saveTechnicalSkills(dto);
+  		return ResponseEntity.status(HttpStatus.CREATED)
+  				.body(CommonResponse.<String>builder().data(employeeId)
+  						.isError(false).message("Techical skills added succesfully").build());
+
+  	}
       
 }

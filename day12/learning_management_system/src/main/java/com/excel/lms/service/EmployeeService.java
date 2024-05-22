@@ -7,6 +7,7 @@ import com.excel.lms.dto.EmployeeBankDetailsDto;
 import com.excel.lms.dto.EmployeePrimaryInfoDto;
 import com.excel.lms.dto.EmployeeSecondaryInfoDto;
 import com.excel.lms.dto.ExpirenceListDto;
+import com.excel.lms.dto.TechicalSkillsListDto;
 
 public interface EmployeeService {
 
@@ -25,6 +26,8 @@ public interface EmployeeService {
 	String addExpirencesDetails(ExpirenceListDto dto);
 
 	String addContactsDetails(ContactListDto dto);
+
+	String saveTechnicalSkills(TechicalSkillsListDto dto);
 
 
 
