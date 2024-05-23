@@ -18,37 +18,37 @@ public class ObjectUtils {
 	
 		return User.builder().username(dto.getUsername())
 				.email(dto.getEmail()).password(dto.getPassword())
-				.createdAt(dto.getCreatedAt()).build();
+				.build();
 	}
 
 	public static UserDto userEntityToDto(User user) {
 	
 		return UserDto.builder().userId(user.getUserId())
 				.username(user.getUsername()).email(user.getEmail())
-				.password(user.getPassword()).createdAt(user.getCreatedAt()).isAdmin(user.isAdmin()).build();
+				.createdAt(user.getCreatedAt()).password(user.getPassword()).isAdmin(user.isAdmin()).build();
 	}
 
 	public static User updateValues(User user, UserDto dto) {
 			user.setUsername(dto.getUsername());
 			user.setEmail(dto.getEmail());
 			user.setPassword(dto.getPassword());
-			user.setCreatedAt(dto.getCreatedAt());
+			
 			user.setAdmin(user.isAdmin());
 			return user;
 	}
 
 	public static List<PurchaseOrders> ordersDtoToEntity(List<PurchaseOrderDto> orders) {
 	
-		return orders.stream().map(order->PurchaseOrders.builder().orderDate(order.getOrderDate())
+		return orders.stream().map(order->PurchaseOrders.builder()
 				.supplier(order.getSupplier()).status(order.getStatus())
-				.createdAt(order.getCreatedAt()).build()).collect(Collectors.toList());
+				.build()).collect(Collectors.toList());
 	}
 
 	public static InventoryItems itemsDtoToEntity(InventoryItemsDto dto) {
 		
-		return InventoryItems .builder().itemname(dto.getItemname()).description(dto.getDescription())
+		return InventoryItems .builder().itemName(dto.getItemName()).description(dto.getDescription())
 				.category(dto.getCategory()).unitPrice(dto.getUnitPrice())
-				.quantityOnHand(dto.getQuantityOnHand()).createdAt(dto.getCreatedAt())
+				.quantityOnHand(dto.getQuantityOnHand())
 				.reorderPoint(dto.getReorderPoint()).build();
 	}
 
@@ -60,14 +60,14 @@ public class ObjectUtils {
 
 	public static InventoryItemsDto itemsEntityToDto(InventoryItems items) {
 		
-		return InventoryItemsDto.builder().itemId(items.getItemId()).itemname(items.getItemname())
+		return InventoryItemsDto.builder().itemId(items.getItemId()).itemName(items.getItemName())
 				.description(items.getDescription()).category(items.getCategory())
 				.unitPrice(items.getUnitPrice()).reorderPoint(items.getReorderPoint())
-				.quantityOnHand(items.getQuantityOnHand()).createdAt(items.getCreatedAt()).build();
+				.quantityOnHand(items.getQuantityOnHand()).build();
 	}
 
 	public static InventoryItems updateValues(InventoryItems item, InventoryItems dto) {
-		item.setItemname(dto.getItemname());
+		item.setItemName(dto.getItemName());
 		item.setDescription(dto.getDescription());
 		item.setCategory(dto.getCategory());
 		item.setCreatedAt(dto.getCreatedAt());

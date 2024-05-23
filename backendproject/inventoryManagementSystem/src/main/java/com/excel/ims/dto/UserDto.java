@@ -1,4 +1,6 @@
 package com.excel.ims.dto;
+import java.time.LocalDate;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,6 +18,6 @@ public class UserDto {
 	private String email;
 	private String password;
 	private boolean isAdmin;
-	private String createdAt;
+	private LocalDate createdAt;
 	
 }

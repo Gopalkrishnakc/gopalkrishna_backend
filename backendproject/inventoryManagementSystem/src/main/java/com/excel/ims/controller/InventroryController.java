@@ -3,6 +3,7 @@ package com.excel.ims.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -20,6 +21,7 @@ import com.excel.ims.entity.InventoryItems;
 import com.excel.ims.service.InventoryService;
 
 @RestController
+@CrossOrigin
 @RequestMapping(path = "/api/v1/inventory", method = { RequestMethod.POST, RequestMethod.PUT })
 public class InventroryController {
 	@Autowired

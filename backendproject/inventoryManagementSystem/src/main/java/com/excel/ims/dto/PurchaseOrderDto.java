@@ -1,6 +1,6 @@
 package com.excel.ims.dto;
 
-import java.time.LocalDate;
+//import java.time.LocalDate;
 
 
 import lombok.AllArgsConstructor;
@@ -16,7 +16,7 @@ import lombok.Setter;
 public class PurchaseOrderDto {
 	private Integer orderId;
 	private String supplier;
-	private LocalDate orderDate;
+//	private LocalDate orderDate;
 	private String status;
-	private String createdAt;
+//	private String createdAt;
 }

@@ -1,6 +1,6 @@
 package com.excel.ims.entity;
 
-import java.time.LocalDate;
+
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -32,9 +32,9 @@ private String quantity;
 private Double unitPrice;
 @JoinColumn(name="purchaseOrder_id")
 @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-private PurchaseOrders purchaseOrders;
+private PurchaseOrders purchaseOrder;
 
 @JoinColumn(name="inventoryItem_id")
 @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-private InventoryItems inventoryItems;
+private InventoryItems inventoryItem;
 }

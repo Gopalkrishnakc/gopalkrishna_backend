@@ -19,7 +19,15 @@ import com.excel.ims.repository.InventoryRepository;
 import com.excel.ims.repository.PurchaseOrderRepository;
 import com.excel.ims.repository.UserRepository;
 import com.excel.ims.utils.ObjectUtils;
-
+import static com.excel.ims.constant. InventoryConstants.USER_ALREDY_FOUND;
+import static com.excel.ims.constant. InventoryConstants.INVALID_USER_NAME;
+import static com.excel.ims.constant. InventoryConstants.NO_USER_FOUND;
+import static com.excel.ims.constant. InventoryConstants.NO_EMAIL_FOUND;
+import static com.excel.ims.constant. InventoryConstants.NO_ORDERS_FOUND;
+import static com.excel.ims.constant. InventoryConstants.ITEM_ALREDAY_FOUND;
+import static com.excel.ims.constant. InventoryConstants.ITEM_NOT_FOUND;
+import static com.excel.ims.constant. InventoryConstants.DATA_NOT_FOUND;
+import static com.excel.ims.constant. InventoryConstants.ITEM_NAME_NOT_FOUND;
 @Service
 public class InventoryServiceImple implements InventoryService {
 	@Autowired
@@ -34,10 +42,10 @@ public class InventoryServiceImple implements InventoryService {
 		if(!userRepository.findByEmail(dto.getEmail()).isPresent()) {
 			User user=ObjectUtils.userDtoToEntitiy( dto);
 			user.setAdmin(true);
-			User user1=userRepository.save(user);
+			userRepository.save(user);
 			return user.getEmail();
 		}
-		 throw new  NoUserFoundException("USER_ALREDY_FOUND");
+		 throw new  NoUserFoundException(USER_ALREDY_FOUND);
 	}
 
 	@Override
@@ -51,7 +59,7 @@ public class InventoryServiceImple implements InventoryService {
 	               return "Incorrect password";
 	           }
 	       }
-	       throw new  NoUserFoundException("INVALID_USER_NAME"); 
+	       throw new  NoUserFoundException(INVALID_USER_NAME); 
 	}
 
 	@Override
@@ -62,7 +70,7 @@ public class InventoryServiceImple implements InventoryService {
 			UserDto user1=ObjectUtils.userEntityToDto(user);
 			return user1;
 		}
-		 throw new  NoUserFoundException("NO_USER_FOUND");
+		 throw new  NoUserFoundException(NO_USER_FOUND);
 	}
 
 	@Override
@@ -74,7 +82,7 @@ public class InventoryServiceImple implements InventoryService {
 			User save=userRepository.save(user);
 			return ObjectUtils.userEntityToDto(save);
 		}
-		 throw new  NoUserFoundException("NO_Email_FOUND");
+		 throw new  NoUserFoundException(NO_EMAIL_FOUND);
 	}
 
 	@Override
@@ -87,17 +95,17 @@ public class InventoryServiceImple implements InventoryService {
 			purchaseOrders.stream().forEach(x->x.setUserTable(user));
 			return userRepository.save(user).getEmail();
 		}
-		 throw new  NoUserFoundException("NO_ORDERS_FOUND");
+		 throw new  NoUserFoundException(NO_ORDERS_FOUND);
 	}
 
 	@Override
 	public String inventoryAdd(InventoryItemsDto dto) {
 		if(!inventoryRepository.findByItemId(dto.getItemId()).isPresent()) {
 			InventoryItems items=ObjectUtils.itemsDtoToEntity(dto);
-			InventoryItems item=inventoryRepository.save(items);
-			return items.getItemname();
+			inventoryRepository.save(items);
+			return items.getItemName();
 		}
-		 throw new  NoUserFoundException("ITEM_ALREDAY_FOUND");
+		 throw new  NoUserFoundException(ITEM_ALREDAY_FOUND);
 	}
 
 	@Override
@@ -110,12 +118,12 @@ public class InventoryServiceImple implements InventoryService {
 			List<PurchaseOrderItems> purchaseOrderItems=ObjectUtils.orderItemsDtoToEntity(dto.getOrderItems());
 			items.setPurchaseOrdersItems(purchaseOrderItems);
 			orders.setPurchaseOrdersItems(purchaseOrderItems);
-			 purchaseOrderItems.stream().forEach(x->x.setInventoryItems(items));
-			 purchaseOrderItems.stream().forEach(x->x.setPurchaseOrders(orders));
-			 PurchaseOrders orders1=purchaseOrderRepository.save(orders);
+			 purchaseOrderItems.stream().forEach(x->x.setInventoryItem(items));
+			 purchaseOrderItems.stream().forEach(x->x.setPurchaseOrder(orders));
+		purchaseOrderRepository.save(orders);
 			 return inventoryRepository.save(items).getItemId();
 		}
-		 throw new  NoUserFoundException("ITEM_NOT_FOUND");
+		 throw new  NoUserFoundException(ITEM_NOT_FOUND);
 	}
 
 	@Override
@@ -126,7 +134,7 @@ public class InventoryServiceImple implements InventoryService {
 		InventoryItemsDto dtos=ObjectUtils.itemsEntityToDto(items);
 		return dtos;
 		}
-		 throw new  NoUserFoundException("DATA_NOT_FOUND");
+		 throw new  NoUserFoundException(DATA_NOT_FOUND);
 	}
 
 	@Override
@@ -138,7 +146,7 @@ public class InventoryServiceImple implements InventoryService {
 			InventoryItems save=inventoryRepository.save(item);
 			return ObjectUtils.itemsEntityToDto(save);
 		} 
-		 throw new  NoUserFoundException("ITEM_NAME_NOT_FOUND");
+		 throw new  NoUserFoundException(ITEM_NAME_NOT_FOUND);
 	}
 
 
