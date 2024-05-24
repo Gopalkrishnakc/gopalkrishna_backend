@@ -28,6 +28,8 @@ import static com.excel.ims.constant. InventoryConstants.ITEM_ALREDAY_FOUND;
 import static com.excel.ims.constant. InventoryConstants.ITEM_NOT_FOUND;
 import static com.excel.ims.constant. InventoryConstants.DATA_NOT_FOUND;
 import static com.excel.ims.constant. InventoryConstants.ITEM_NAME_NOT_FOUND;
+import static com.excel.ims.constant. InventoryConstants.NO_USERS_FOUND;
+import static com.excel.ims.constant. InventoryConstants.NO_ITEMS_FOUND;
 @Service
 public class InventoryServiceImple implements InventoryService {
 	@Autowired
@@ -72,6 +74,20 @@ public class InventoryServiceImple implements InventoryService {
 		}
 		 throw new  NoUserFoundException(NO_USER_FOUND);
 	}
+	@Override
+	public List<UserDto> userGetAll() {
+
+		try {
+			return userRepository.findAll().stream().map(u->UserDto.builder().email(u.getEmail())
+					.createdAt(u.getCreatedAt()).password(u.getPassword())
+					.userId(u.getUserId()).username(u.getUsername())
+					.build()).toList();
+		} catch (Exception e) {
+			
+			 throw new  NoUserFoundException(NO_USERS_FOUND);
+		}
+	}
+
 
 	@Override
 	public UserDto updateUser(UserDto dto) {
@@ -84,6 +100,19 @@ public class InventoryServiceImple implements InventoryService {
 		}
 		 throw new  NoUserFoundException(NO_EMAIL_FOUND);
 	}
+	@Override
+	public String deleteUser(UserDto dto) {
+	Optional<User> optional=userRepository.findByEmail(dto.getEmail());
+	if(optional.isPresent()) {
+		User get=optional.get();
+	    userRepository.delete(get);
+	    return "User Deleted Successfully";
+	    		
+				
+	}
+	 throw new  NoUserFoundException(NO_USER_FOUND);
+	}
+
 
 	@Override
 	public String orderAdd(PurchaseOrderListDto dto) {
@@ -149,6 +178,35 @@ public class InventoryServiceImple implements InventoryService {
 		 throw new  NoUserFoundException(ITEM_NAME_NOT_FOUND);
 	}
 
+	@Override
+	public List<InventoryItemsDto> userGetAllProducts() {
+		try {
+			return inventoryRepository.findAll().stream().map(i->InventoryItemsDto.builder()
+					.itemId(i.getItemId()).itemName(i.getItemName())
+					.description(i.getDescription()).category(i.getCategory())
+					.unitPrice(i.getUnitPrice()).quantityOnHand(i.getQuantityOnHand())
+					.reorderPoint(i.getReorderPoint()).createdAt(i.getCreatedAt()).build()).toList();
+		} catch (Exception e) {
+			
+			 throw new  NoUserFoundException(NO_ITEMS_FOUND);
+		}
+	}
+
+	@Override
+	public String deleteItem(InventoryItems dto) {
+		Optional<InventoryItems>optional=inventoryRepository.findByItemId(dto.getItemId());
+		if(optional.isPresent()) {
+			InventoryItems get=optional.get();
+		    inventoryRepository.delete(get);
+		    return "User Deleted Successfully";
+		    		
+					
+		}
+		 throw new  NoUserFoundException("NO_ITEM_FOUND");
+		}
+
+	
+	
 
 	
 

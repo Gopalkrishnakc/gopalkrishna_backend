@@ -1,5 +1,7 @@
 package com.excel.ims.service;
 
+import java.util.List;
+
 import com.excel.ims.dto.InventoryItemsDto;
 import com.excel.ims.dto.PurchaseOrderItemsListDto;
 import com.excel.ims.dto.PurchaseOrderListDto;
@@ -25,6 +27,14 @@ public interface InventoryService {
 	InventoryItemsDto inventoryItemGet(InventoryItems dto);
 
 	InventoryItemsDto updateInventoryItems(InventoryItems dto);
+
+	List<UserDto> userGetAll();
+
+	String deleteUser(UserDto dto);
+
+	List<InventoryItemsDto> userGetAllProducts();
+
+	String deleteItem(InventoryItems dto);
 
 
 
