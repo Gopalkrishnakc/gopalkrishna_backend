@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.excel.ims.dto.InventoryItemsDto;
+import com.excel.ims.dto.PurchaseOrderDto;
 import com.excel.ims.dto.PurchaseOrderItemsListDto;
 import com.excel.ims.dto.PurchaseOrderListDto;
 import com.excel.ims.dto.UserDto;
@@ -204,6 +205,19 @@ public class InventoryServiceImple implements InventoryService {
 		}
 		 throw new  NoUserFoundException("NO_ITEM_FOUND");
 		}
+
+	@Override
+	public List<PurchaseOrderDto> getALLorders() {
+		
+		try {
+			return purchaseOrderRepository.findAll().stream().map(o->PurchaseOrderDto.builder()
+					.orderId(o.getOrderId()).status(o.getStatus())
+					.supplier(o.getSupplier())
+					.orderDate(o.getOrderDate()).createdAt(o.getCreatedAt()).build()).toList();
+		} catch (Exception e) {
+			 throw new  NoUserFoundException("NO_ORDERS_FOUND");
+		}
+	}
 
 	
 	

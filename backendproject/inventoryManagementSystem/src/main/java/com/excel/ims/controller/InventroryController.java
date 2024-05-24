@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.excel.ims.commomrespose.CommonResponse;
 import com.excel.ims.dto.InventoryItemsDto;
+import com.excel.ims.dto.PurchaseOrderDto;
 import com.excel.ims.dto.PurchaseOrderItemsListDto;
 import com.excel.ims.dto.PurchaseOrderListDto;
 import com.excel.ims.dto.UserDto;
@@ -69,12 +70,19 @@ public class InventroryController {
 		return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<String>builder()
 				.isError(false).data(userDelete).message("USER_DELETED_SUCCESS").build());
 	}
+	
 
 	@PostMapping(path = "/orderlist")
 	ResponseEntity<CommonResponse<String>> orderAdd(@RequestBody PurchaseOrderListDto dto) {
 		String orderAdded = inventoryService.orderAdd(dto);
 		return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<String>builder().data(orderAdded)
 				.message("ordersAdded Successfull").isError(false).build());
+	}
+	@GetMapping(path = "/oderlist/getall")
+	  ResponseEntity<CommonResponse<List<PurchaseOrderDto>>> getAllOrders(){
+		List<PurchaseOrderDto> orders=inventoryService.getALLorders();
+		return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<List<PurchaseOrderDto>>builder()
+				.isError(false).message("List Orders Fetched Sucessfully").data(orders).build());
 	}
 
 	@PostMapping(path = "/inventory")
@@ -83,6 +91,7 @@ public class InventroryController {
 		return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<String>builder().data(inventoryAdded)
 				.message("InventoryAdded Successfull").isError(false).build());
 	}
+	
 	@GetMapping(path = "/inventory/get")
 	ResponseEntity<CommonResponse<InventoryItemsDto>> inventoryItemGet(@RequestBody InventoryItems dto) {
 		InventoryItemsDto inventoryItemfetch = inventoryService.inventoryItemGet(dto);
@@ -115,6 +124,7 @@ public class InventroryController {
 		return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<Integer>builder().data(orderItemsAdded)
 				.message("ordersAdded Successfull").isError(false).build());
 	}
+	
 	
 	
 }
