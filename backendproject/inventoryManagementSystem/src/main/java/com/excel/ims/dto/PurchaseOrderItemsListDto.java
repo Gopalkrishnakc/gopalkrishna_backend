@@ -16,7 +16,7 @@ import lombok.Setter;
 @Builder
 public class PurchaseOrderItemsListDto {
 	private Integer itemId;
-	private String supplier;
+	private Integer orderId;
 	private List<PurchaseOrderItemsDto> orderItems;
 	
 	

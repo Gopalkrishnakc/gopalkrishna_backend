@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.excel.ims.commomrespose.CommonResponse;
 import com.excel.ims.dto.InventoryItemsDto;
 import com.excel.ims.dto.PurchaseOrderDto;
+import com.excel.ims.dto.PurchaseOrderItemsDto;
 import com.excel.ims.dto.PurchaseOrderItemsListDto;
 import com.excel.ims.dto.PurchaseOrderListDto;
 import com.excel.ims.dto.UserDto;
@@ -78,11 +79,17 @@ public class InventroryController {
 		return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<String>builder().data(orderAdded)
 				.message("ordersAdded Successfull").isError(false).build());
 	}
-	@GetMapping(path = "/oderlist/getall")
+	@GetMapping(path = "/orderlist/getall")
 	  ResponseEntity<CommonResponse<List<PurchaseOrderDto>>> getAllOrders(){
 		List<PurchaseOrderDto> orders=inventoryService.getALLorders();
 		return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<List<PurchaseOrderDto>>builder()
 				.isError(false).message("List Orders Fetched Sucessfully").data(orders).build());
+	}
+	@DeleteMapping(path = "/orderlist/delete")
+	ResponseEntity<CommonResponse<String>> deleteOrders(@RequestBody PurchaseOrderDto dto){
+		String orderDelete=inventoryService.deleteOrders(dto);
+		return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<String>builder()
+				.isError(false).data(orderDelete).message("USER_DELETED_SUCCESS").build());
 	}
 
 	@PostMapping(path = "/inventory")
@@ -122,9 +129,15 @@ public class InventroryController {
 	ResponseEntity<CommonResponse<Integer>> orderItemsAdd(@RequestBody PurchaseOrderItemsListDto dto) {
 		Integer orderItemsAdded = inventoryService.orderItemsAdd(dto);
 		return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<Integer>builder().data(orderItemsAdded)
-				.message("ordersAdded Successfull").isError(false).build());
+				.message("ordersItemsAdded Successfull").isError(false).build());
 	}
 	
+	@GetMapping(path = "/purchaseItems/getall")
+	ResponseEntity<CommonResponse<List<PurchaseOrderItemsDto>>> getAllItems(){
+		List<PurchaseOrderItemsDto> orderitems=inventoryService.getAllOrdersItems();
+		return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<List<PurchaseOrderItemsDto>>builder().data(orderitems)
+				 .isError(false).message("ALL_ORDERSITEMS_FETCHED_SUCCESSFULLY").build());
+	}
 	
 	
 }

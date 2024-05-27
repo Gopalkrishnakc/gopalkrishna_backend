@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.excel.ims.dto.InventoryItemsDto;
 import com.excel.ims.dto.PurchaseOrderDto;
+import com.excel.ims.dto.PurchaseOrderItemsDto;
 import com.excel.ims.dto.PurchaseOrderItemsListDto;
 import com.excel.ims.dto.PurchaseOrderListDto;
 import com.excel.ims.dto.UserDto;
@@ -38,6 +39,10 @@ public interface InventoryService {
 	String deleteItem(InventoryItems dto);
 
 	List<PurchaseOrderDto> getALLorders();
+
+	String deleteOrders(PurchaseOrderDto dto);
+
+	List<PurchaseOrderItemsDto> getAllOrdersItems();
 
 
 

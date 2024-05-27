@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.excel.ims.dto.InventoryItemsDto;
 import com.excel.ims.dto.PurchaseOrderDto;
+import com.excel.ims.dto.PurchaseOrderItemsDto;
 import com.excel.ims.dto.PurchaseOrderItemsListDto;
 import com.excel.ims.dto.PurchaseOrderListDto;
 import com.excel.ims.dto.UserDto;
@@ -17,6 +18,7 @@ import com.excel.ims.entity.PurchaseOrders;
 import com.excel.ims.entity.User;
 import com.excel.ims.exception.NoUserFoundException;
 import com.excel.ims.repository.InventoryRepository;
+import com.excel.ims.repository.PurchaseOrderItemsRepository;
 import com.excel.ims.repository.PurchaseOrderRepository;
 import com.excel.ims.repository.UserRepository;
 import com.excel.ims.utils.ObjectUtils;
@@ -39,14 +41,21 @@ public class InventoryServiceImple implements InventoryService {
 	private InventoryRepository inventoryRepository;
 	@Autowired
 	private  PurchaseOrderRepository purchaseOrderRepository;
+	@Autowired
+	private PurchaseOrderItemsRepository purchaseOrderItemRepository;
 
 	@Override
 	public String addUserInfo(UserDto dto) {
-		if(!userRepository.findByEmail(dto.getEmail()).isPresent()) {
-			User user=ObjectUtils.userDtoToEntitiy( dto);
-			user.setAdmin(true);
-			userRepository.save(user);
-			return user.getEmail();
+		try {
+			if(!userRepository.findByEmail(dto.getEmail()).isPresent()) {
+				User user=ObjectUtils.userDtoToEntitiy( dto);
+				user.setAdmin(true);
+				userRepository.save(user);
+				return user.getEmail();
+			}
+		} catch (Exception e) {
+		
+			throw new  NoUserFoundException(USER_ALREDY_FOUND);
 		}
 		 throw new  NoUserFoundException(USER_ALREDY_FOUND);
 	}
@@ -118,30 +127,41 @@ public class InventoryServiceImple implements InventoryService {
 	@Override
 	public String orderAdd(PurchaseOrderListDto dto) {
 		Optional<User> optional=userRepository.findByEmail(dto.getEmail());
-		if(optional.isPresent()) {
-			User user=optional.get();
-			List<PurchaseOrders> purchaseOrders=ObjectUtils.ordersDtoToEntity(dto.getOrders());
-			user.setPurchaseOrders(purchaseOrders);
-			purchaseOrders.stream().forEach(x->x.setUserTable(user));
-			return userRepository.save(user).getEmail();
+		try {
+			if(optional.isPresent()) {
+				User user=optional.get();
+				List<PurchaseOrders> purchaseOrders=ObjectUtils.ordersDtoToEntity(dto.getOrders());
+				user.setPurchaseOrders(purchaseOrders);
+				purchaseOrders.stream().forEach(x->x.setUserTable(user));
+				return userRepository.save(user).getEmail();
+			}
+		} catch (Exception e) {
+		
+			throw new  NoUserFoundException("DUPLICATE_SUPPILER_NAME");
 		}
-		 throw new  NoUserFoundException(NO_ORDERS_FOUND);
+		throw new  NoUserFoundException(NO_ORDERS_FOUND);
 	}
 
 	@Override
 	public String inventoryAdd(InventoryItemsDto dto) {
-		if(!inventoryRepository.findByItemId(dto.getItemId()).isPresent()) {
-			InventoryItems items=ObjectUtils.itemsDtoToEntity(dto);
-			inventoryRepository.save(items);
-			return items.getItemName();
+		try {
+			if(!inventoryRepository.findByItemId(dto.getItemId()).isPresent()) {
+				InventoryItems items=ObjectUtils.itemsDtoToEntity(dto);
+				inventoryRepository.save(items);
+				return items.getItemName();
+			}
+		} catch (Exception e) {
+
+			 throw new  NoUserFoundException(ITEM_ALREDAY_FOUND);
 		}
+
 		 throw new  NoUserFoundException(ITEM_ALREDAY_FOUND);
 	}
 
 	@Override
 	public Integer orderItemsAdd(PurchaseOrderItemsListDto dto) {
 		Optional<InventoryItems> inventoryOptional=inventoryRepository.findByItemId(dto.getItemId());
-		Optional<PurchaseOrders> orderOptional= purchaseOrderRepository.findBySupplier(dto.getSupplier());
+		Optional<PurchaseOrders> orderOptional= purchaseOrderRepository.findByOrderId(dto.getOrderId());
 		if(inventoryOptional.isPresent()&& orderOptional.isPresent()) {
 			InventoryItems items=inventoryOptional.get();
 			PurchaseOrders orders=orderOptional.get();
@@ -217,6 +237,24 @@ public class InventoryServiceImple implements InventoryService {
 		} catch (Exception e) {
 			 throw new  NoUserFoundException("NO_ORDERS_FOUND");
 		}
+	}
+
+	@Override
+	public String deleteOrders(PurchaseOrderDto dto) {
+	Optional<PurchaseOrders> optional=purchaseOrderRepository.findByOrderId(dto.getOrderId());
+	if(optional.isPresent()) {
+		PurchaseOrders order=optional.get();
+		purchaseOrderRepository.delete(order);
+	}
+	 throw new  NoUserFoundException("NO_ORDERS_FOUND");
+	}
+
+	@Override
+	public List<PurchaseOrderItemsDto> getAllOrdersItems() {
+	
+		return purchaseOrderItemRepository.findAll().stream().map(i->PurchaseOrderItemsDto.builder()
+				.orderItemId(i.getOrderItemId())
+				.quantity(i.getQuantity()).unitPrice(i.getUnitPrice()).build()).toList();
 	}
 
 	

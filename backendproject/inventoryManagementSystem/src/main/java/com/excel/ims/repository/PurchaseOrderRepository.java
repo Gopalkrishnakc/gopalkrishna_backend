@@ -8,4 +8,5 @@ import com.excel.ims.entity.PurchaseOrders;
 
 public interface PurchaseOrderRepository extends JpaRepository<PurchaseOrders, Integer>{
 Optional<PurchaseOrders> findBySupplier(String supplier);
+Optional<PurchaseOrders> findByOrderId(Integer orderId);
 }

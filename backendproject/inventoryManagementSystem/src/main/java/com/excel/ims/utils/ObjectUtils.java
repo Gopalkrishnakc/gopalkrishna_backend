@@ -1,5 +1,6 @@
 package com.excel.ims.utils;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,7 +50,7 @@ public class ObjectUtils {
 		return InventoryItems .builder().itemName(dto.getItemName()).description(dto.getDescription())
 				.category(dto.getCategory()).unitPrice(dto.getUnitPrice())
 				.quantityOnHand(dto.getQuantityOnHand())
-				.reorderPoint(dto.getReorderPoint()).build();
+				.reorderPoint(dto.getReorderPoint()).createdAt(dto.getCreatedAt()).build();
 	}
 
 	public static List<PurchaseOrderItems> orderItemsDtoToEntity(List<PurchaseOrderItemsDto> orderItems) {
@@ -69,8 +70,8 @@ public class ObjectUtils {
 	public static InventoryItems updateValues(InventoryItems item, InventoryItems dto) {
 		item.setItemName(dto.getItemName());
 		item.setDescription(dto.getDescription());
+		item.setCreatedAt(LocalDate.now());
 		item.setCategory(dto.getCategory());
-		item.setCreatedAt(dto.getCreatedAt());
 		item.setUnitPrice(dto.getUnitPrice());
 		item.setQuantityOnHand(dto.getQuantityOnHand());
 		return item;
