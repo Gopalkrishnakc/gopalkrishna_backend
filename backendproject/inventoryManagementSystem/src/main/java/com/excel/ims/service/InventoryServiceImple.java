@@ -256,10 +256,4 @@ public class InventoryServiceImple implements InventoryService {
 				.orderItemId(i.getOrderItemId())
 				.quantity(i.getQuantity()).unitPrice(i.getUnitPrice()).build()).toList();
 	}
-
-	
-	
-
-	
-
 }
