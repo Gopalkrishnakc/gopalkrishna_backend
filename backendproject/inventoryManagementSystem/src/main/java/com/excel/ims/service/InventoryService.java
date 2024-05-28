@@ -44,6 +44,8 @@ public interface InventoryService {
 
 	List<PurchaseOrderItemsDto> getAllOrdersItems();
 
+	PurchaseOrderDto updateOrder(PurchaseOrderDto dto);
+
 
 
 }

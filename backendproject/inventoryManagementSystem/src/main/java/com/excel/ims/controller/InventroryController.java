@@ -72,9 +72,10 @@ public class InventroryController {
 				.isError(false).data(userDelete).message("USER_DELETED_SUCCESS").build());
 	}
 	
-
+	@CrossOrigin("*")
 	@PostMapping(path = "/orderlist")
 	ResponseEntity<CommonResponse<String>> orderAdd(@RequestBody PurchaseOrderListDto dto) {
+		System.out.println(dto.getEmail());
 		String orderAdded = inventoryService.orderAdd(dto);
 		return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<String>builder().data(orderAdded)
 				.message("ordersAdded Successfull").isError(false).build());
@@ -91,7 +92,12 @@ public class InventroryController {
 		return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<String>builder()
 				.isError(false).data(orderDelete).message("USER_DELETED_SUCCESS").build());
 	}
-
+	@PutMapping(path = "/orderlist/put")
+	public ResponseEntity<CommonResponse<PurchaseOrderDto>> updateOrder(@RequestBody PurchaseOrderDto dto) {
+		PurchaseOrderDto updatedorder = inventoryService.updateOrder(dto);
+		return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<PurchaseOrderDto>builder().data(updatedorder)
+				.isError(false).message("USER_UPDATE_SUCCESS").build());
+	}
 	@PostMapping(path = "/inventory")
 	ResponseEntity<CommonResponse<String>> inventoryAdd(@RequestBody InventoryItemsDto dto) {
 		String inventoryAdded = inventoryService.inventoryAdd(dto);

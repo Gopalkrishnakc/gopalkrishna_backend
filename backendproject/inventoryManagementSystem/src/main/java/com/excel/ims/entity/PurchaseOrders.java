@@ -31,7 +31,7 @@ public class PurchaseOrders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer orderId;
-    @Column(unique=true)
+   
     private String supplier;
     private LocalDate orderDate;
     private String status;

@@ -70,11 +70,24 @@ public class ObjectUtils {
 	public static InventoryItems updateValues(InventoryItems item, InventoryItems dto) {
 		item.setItemName(dto.getItemName());
 		item.setDescription(dto.getDescription());
-		item.setCreatedAt(LocalDate.now());
+//		item.setCreatedAt(LocalDate.now());
 		item.setCategory(dto.getCategory());
 		item.setUnitPrice(dto.getUnitPrice());
+		item.setReorderPoint(dto.getReorderPoint());
 		item.setQuantityOnHand(dto.getQuantityOnHand());
 		return item;
+	}
+
+	public static PurchaseOrders updateValues(PurchaseOrders order, PurchaseOrderDto dto) {
+		order.setSupplier(dto.getSupplier());
+		order.setStatus(dto.getStatus());
+		return order;
+	}
+
+	public static PurchaseOrderDto orderEntityToDto(PurchaseOrders save) {
+		
+		return PurchaseOrderDto.builder().createdAt(save.getCreatedAt()).orderDate(save.getOrderDate())
+				.status(save.getStatus()).supplier(save.getSupplier()).orderId(save.getOrderId()).build();
 	}
 
 }
