@@ -50,7 +50,7 @@ public class InventoryServiceImple implements InventoryService {
 		try {
 			if (!userRepository.findByEmail(dto.getEmail()).isPresent()) {
 				User user = ObjectUtils.userDtoToEntitiy(dto);
-				user.setAdmin(true);
+				user.setAdmin(false);
 				userRepository.save(user);
 				return user.getEmail();
 			}
@@ -132,6 +132,7 @@ public class InventoryServiceImple implements InventoryService {
 			if (optional.isPresent()) {
 				User user = optional.get();
 				System.out.println("user details :"+user);
+				
 				List<PurchaseOrders> purchaseOrders = ObjectUtils.ordersDtoToEntity(dto.getOrders());
 				user.setPurchaseOrders(purchaseOrders);
 				purchaseOrders.stream().forEach(x -> x.setUserTable(user));
@@ -230,11 +231,12 @@ public class InventoryServiceImple implements InventoryService {
 
 	@Override
 	public List<PurchaseOrderDto> getALLorders() {
-
 		try {
 			return purchaseOrderRepository.findAll().stream()
 					.map(o -> PurchaseOrderDto.builder().orderId(o.getOrderId()).status(o.getStatus())
-							.supplier(o.getSupplier()).orderDate(o.getOrderDate()).createdAt(o.getCreatedAt()).build())
+							.supplier(o.getSupplier()).orderDate(o.getOrderDate()).createdAt(o.getCreatedAt())
+							.email(o.getUserTable().getEmail())
+							.build())
 					.toList();
 		} catch (Exception e) {
 			throw new NoUserFoundException("NO_ORDERS_FOUND");
@@ -255,7 +257,10 @@ public class InventoryServiceImple implements InventoryService {
 	public List<PurchaseOrderItemsDto> getAllOrdersItems() {
 
 		return purchaseOrderItemRepository.findAll().stream().map(i -> PurchaseOrderItemsDto.builder()
-				.orderItemId(i.getOrderItemId()).quantity(i.getQuantity()).unitPrice(i.getUnitPrice()).build())
+				.orderItemId(i.getOrderItemId()).quantity(i.getQuantity())
+				.unitPrice(i.getUnitPrice())
+				.orderId(i.getPurchaseOrder().getOrderId()). 
+				itemName(i.getInventoryItem().getItemName()).build())
 				.toList();
 	}
 

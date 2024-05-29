@@ -15,4 +15,6 @@ public class PurchaseOrderItemsDto {
 	private Integer orderItemId;
 	private String quantity;
 	private Double unitPrice;
+	private String itemName;
+	private Integer orderId;
 }

@@ -19,4 +19,5 @@ public class PurchaseOrderDto {
 	private LocalDate orderDate;
 	private String status;
 	private LocalDate createdAt;
+	private String email;
 }
