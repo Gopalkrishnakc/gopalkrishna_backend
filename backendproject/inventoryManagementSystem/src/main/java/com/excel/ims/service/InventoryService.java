@@ -2,6 +2,7 @@ package com.excel.ims.service;
 
 import java.util.List;
 
+import com.excel.ims.dto.AdminDto;
 import com.excel.ims.dto.InventoryItemsDto;
 import com.excel.ims.dto.PurchaseOrderDto;
 import com.excel.ims.dto.PurchaseOrderItemsDto;
@@ -45,6 +46,10 @@ public interface InventoryService {
 	List<PurchaseOrderItemsDto> getAllOrdersItems();
 
 	PurchaseOrderDto updateOrder(PurchaseOrderDto dto);
+
+	String adminAdd(AdminDto dto);
+
+	String adminLogin(AdminDto dto);
 
 
 

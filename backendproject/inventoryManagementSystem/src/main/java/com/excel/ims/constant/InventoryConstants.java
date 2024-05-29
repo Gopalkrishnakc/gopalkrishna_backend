@@ -11,7 +11,7 @@ public class InventoryConstants {
 	public static final String ITEM_ALREDAY_FOUND=" Item already Found";
 	public static final String DATA_NOT_FOUND=" DAta Not Found";
 	public static final String ITEM_NAME_NOT_FOUND=" Item Name Not Found";
-	public static final String INVALID_USER_NAME=" Invalid User Name";
+	public static final String INVALID_USER_NAME_AND_PASSWORD=" Invalid User Name and password";
 	public static final String NO_USERS_FOUND="  No Users Found";
 	public static final String NO_ITEMS_FOUND="  No ItemsFound";
 }

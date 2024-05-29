@@ -4,10 +4,12 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.excel.ims.dto.AdminDto;
 import com.excel.ims.dto.InventoryItemsDto;
 import com.excel.ims.dto.PurchaseOrderDto;
 import com.excel.ims.dto.PurchaseOrderItemsDto;
 import com.excel.ims.dto.UserDto;
+import com.excel.ims.entity.Admin;
 import com.excel.ims.entity.InventoryItems;
 import com.excel.ims.entity.PurchaseOrderItems;
 import com.excel.ims.entity.PurchaseOrders;
@@ -80,6 +82,8 @@ public class ObjectUtils {
 
 	public static PurchaseOrders updateValues(PurchaseOrders order, PurchaseOrderDto dto) {
 		order.setSupplier(dto.getSupplier());
+		order.setOrderDate(LocalDate.now());
+        order.setCreatedAt(LocalDate.now());
 		order.setStatus(dto.getStatus());
 		return order;
 	}
@@ -88,6 +92,12 @@ public class ObjectUtils {
 		
 		return PurchaseOrderDto.builder().createdAt(save.getCreatedAt()).orderDate(save.getOrderDate())
 				.status(save.getStatus()).supplier(save.getSupplier()).orderId(save.getOrderId()).build();
+	}
+
+	public static Admin itemsDtoToEntity(AdminDto dto) {
+		
+		return Admin.builder().adminame(dto.getAdminame()).adminId(dto.getAdminId())
+				.email(dto.getEmail()).password(dto.getPassword()).build();
 	}
 
 }

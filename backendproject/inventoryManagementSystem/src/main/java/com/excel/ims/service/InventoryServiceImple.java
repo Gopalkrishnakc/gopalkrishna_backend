@@ -6,24 +6,27 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.excel.ims.dto.AdminDto;
 import com.excel.ims.dto.InventoryItemsDto;
 import com.excel.ims.dto.PurchaseOrderDto;
 import com.excel.ims.dto.PurchaseOrderItemsDto;
 import com.excel.ims.dto.PurchaseOrderItemsListDto;
 import com.excel.ims.dto.PurchaseOrderListDto;
 import com.excel.ims.dto.UserDto;
+import com.excel.ims.entity.Admin;
 import com.excel.ims.entity.InventoryItems;
 import com.excel.ims.entity.PurchaseOrderItems;
 import com.excel.ims.entity.PurchaseOrders;
 import com.excel.ims.entity.User;
 import com.excel.ims.exception.NoUserFoundException;
+import com.excel.ims.repository.AdminRepository;
 import com.excel.ims.repository.InventoryRepository;
 import com.excel.ims.repository.PurchaseOrderItemsRepository;
 import com.excel.ims.repository.PurchaseOrderRepository;
 import com.excel.ims.repository.UserRepository;
 import com.excel.ims.utils.ObjectUtils;
 import static com.excel.ims.constant.InventoryConstants.USER_ALREDY_FOUND;
-import static com.excel.ims.constant.InventoryConstants.INVALID_USER_NAME;
+import static com.excel.ims.constant.InventoryConstants.INVALID_USER_NAME_AND_PASSWORD;
 import static com.excel.ims.constant.InventoryConstants.NO_USER_FOUND;
 import static com.excel.ims.constant.InventoryConstants.NO_EMAIL_FOUND;
 import static com.excel.ims.constant.InventoryConstants.NO_ORDERS_FOUND;
@@ -44,7 +47,9 @@ public class InventoryServiceImple implements InventoryService {
 	private PurchaseOrderRepository purchaseOrderRepository;
 	@Autowired
 	private PurchaseOrderItemsRepository purchaseOrderItemRepository;
-
+	@Autowired
+	private AdminRepository adminRepository;
+	
 	@Override
 	public String addUserInfo(UserDto dto) {
 		try {
@@ -72,7 +77,7 @@ public class InventoryServiceImple implements InventoryService {
 				return "Incorrect password";
 			}
 		}
-		throw new NoUserFoundException(INVALID_USER_NAME);
+		throw new NoUserFoundException(INVALID_USER_NAME_AND_PASSWORD);
 	}
 
 	@Override
@@ -274,5 +279,32 @@ public class InventoryServiceImple implements InventoryService {
 			return ObjectUtils.orderEntityToDto(save);
 		}
 		throw new NoUserFoundException("NO_ORDERS_FOUND");
+	}
+
+	@Override
+	public String adminAdd(AdminDto dto) {
+		Optional<Admin> optional=adminRepository.findByEmail(dto.getEmail());
+		if(!optional.isPresent()) {
+			Admin admin=ObjectUtils.itemsDtoToEntity(dto);
+			admin.setAdmin(true);
+			adminRepository.save(admin);
+			
+			return admin.getEmail();
+		}
+		throw new NoUserFoundException("admin_ALready_FOUND");
+	}
+
+	@Override
+	public String adminLogin(AdminDto dto) {
+		Optional<Admin> optional = adminRepository.findByEmail(dto.getEmail());
+		if (optional.isPresent()) {
+		Admin admin = optional.get();
+			if (admin.getPassword().equals(dto.getPassword())) {
+				return admin.getAdminame();
+			} else {
+				return "Incorrect password";
+			}
+		}
+		throw new NoUserFoundException(INVALID_USER_NAME_AND_PASSWORD);
 	}
 }
