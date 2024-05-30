@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.excel.ims.commomrespose.CommonResponse;
+import com.excel.ims.dto.AdminDto;
 import com.excel.ims.dto.InventoryItemsDto;
 import com.excel.ims.dto.PurchaseOrderDto;
 import com.excel.ims.dto.PurchaseOrderItemsDto;
@@ -144,6 +145,18 @@ public class InventroryController {
 		return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<List<PurchaseOrderItemsDto>>builder().data(orderitems)
 				 .isError(false).message("ALL_ORDERSITEMS_FETCHED_SUCCESSFULLY").build());
 	}
+	@PostMapping(path = "/admin")
+	ResponseEntity<CommonResponse<String>> adminAdd(@RequestBody AdminDto dto) {
+		String adminAdded = inventoryService.adminAdd(dto);
+		return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<String>builder().data(adminAdded)
+				.message("Admin Added Successfull").isError(false).build());
+	}
 	
-	
+	@PostMapping(path = "/admin/login")
+	ResponseEntity<CommonResponse<String>> adminLogin(@RequestBody  AdminDto dto) {
+		String adminAdded = inventoryService.adminLogin(dto);
+		return ResponseEntity.status(HttpStatus.OK).body(
+				CommonResponse.<String>builder().data(adminAdded).message("Login Successfull").isError(false).build());
+	}
+
 }
