@@ -16,4 +16,6 @@ public class AdminDto {
 	private String email;
 	private String password;
 	private boolean isAdmin;
+
 }
+

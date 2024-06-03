@@ -1,7 +1,4 @@
 package com.excel.ims.entity;
-
-
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,4 +22,6 @@ public class Admin {
 	private String email;
 	private String password;
 	private boolean isAdmin;
+
 }
+

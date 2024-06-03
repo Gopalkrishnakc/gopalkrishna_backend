@@ -300,7 +300,11 @@ public class InventoryServiceImple implements InventoryService {
 		if (optional.isPresent()) {
 		Admin admin = optional.get();
 			if (admin.getPassword().equals(dto.getPassword())) {
+
 				return "email and password matches!!";
+
+				
+
 			} else {
 				return "Incorrect password";
 			}

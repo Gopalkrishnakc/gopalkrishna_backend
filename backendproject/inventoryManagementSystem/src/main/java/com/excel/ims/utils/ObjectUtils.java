@@ -82,6 +82,8 @@ public class ObjectUtils {
 
 	public static PurchaseOrders updateValues(PurchaseOrders order, PurchaseOrderDto dto) {
 		order.setSupplier(dto.getSupplier());
+		order.setOrderDate(LocalDate.now());
+        order.setCreatedAt(LocalDate.now());
 		order.setStatus(dto.getStatus());
 		return order;
 	}
@@ -94,11 +96,15 @@ public class ObjectUtils {
 
 	public static Admin itemsDtoToEntity(AdminDto dto) {
 		
+
 			return Admin.builder().adminame(dto.getAdminame()).adminId(dto.getAdminId())
 					.email(dto.getEmail()).password(dto.getPassword()).build();
-		}
-	
+		
+
+		
+	}
 
 }
+
 
 
