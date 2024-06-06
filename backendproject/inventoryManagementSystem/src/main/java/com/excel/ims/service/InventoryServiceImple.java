@@ -49,7 +49,7 @@ public class InventoryServiceImple implements InventoryService {
 	private PurchaseOrderItemsRepository purchaseOrderItemRepository;
 	@Autowired
 	private AdminRepository adminRepository;
-	
+
 	@Override
 	public String addUserInfo(UserDto dto) {
 		try {
@@ -81,8 +81,8 @@ public class InventoryServiceImple implements InventoryService {
 	}
 
 	@Override
-	public UserDto userGet(UserDto dto) {
-		Optional<User> optional = userRepository.findByEmail(dto.getEmail());
+	public UserDto userGet(String email) {
+		Optional<User> optional = userRepository.findByEmail(email);
 		if (optional.isPresent()) {
 			User user = optional.get();
 			UserDto user1 = ObjectUtils.userEntityToDto(user);
@@ -132,12 +132,12 @@ public class InventoryServiceImple implements InventoryService {
 	@Override
 	public String orderAdd(PurchaseOrderListDto dto) {
 		Optional<User> optional = userRepository.findByEmail(dto.getEmail());
-		System.out.println("optional object is "+optional+ "status"+optional.isPresent());
+		System.out.println("optional object is " + optional + "status" + optional.isPresent());
 		try {
 			if (optional.isPresent()) {
 				User user = optional.get();
-				System.out.println("user details :"+user);
-				
+				System.out.println("user details :" + user);
+
 				List<PurchaseOrders> purchaseOrders = ObjectUtils.ordersDtoToEntity(dto.getOrders());
 				user.setPurchaseOrders(purchaseOrders);
 				purchaseOrders.stream().forEach(x -> x.setUserTable(user));
@@ -185,8 +185,8 @@ public class InventoryServiceImple implements InventoryService {
 	}
 
 	@Override
-	public InventoryItemsDto inventoryItemGet(InventoryItems dto) {
-		Optional<InventoryItems> optional = inventoryRepository.findByItemId(dto.getItemId());
+	public InventoryItemsDto inventoryItemGet(Integer itemId) {
+		Optional<InventoryItems> optional = inventoryRepository.findByItemId(itemId);
 		if (optional.isPresent()) {
 			InventoryItems items = optional.get();
 			InventoryItemsDto dtos = ObjectUtils.itemsEntityToDto(items);
@@ -240,8 +240,7 @@ public class InventoryServiceImple implements InventoryService {
 			return purchaseOrderRepository.findAll().stream()
 					.map(o -> PurchaseOrderDto.builder().orderId(o.getOrderId()).status(o.getStatus())
 							.supplier(o.getSupplier()).orderDate(o.getOrderDate()).createdAt(o.getCreatedAt())
-							.email(o.getUserTable().getEmail())
-							.build())
+							.email(o.getUserTable().getEmail()).build())
 					.toList();
 		} catch (Exception e) {
 			throw new NoUserFoundException("NO_ORDERS_FOUND");
@@ -261,11 +260,10 @@ public class InventoryServiceImple implements InventoryService {
 	@Override
 	public List<PurchaseOrderItemsDto> getAllOrdersItems() {
 
-		return purchaseOrderItemRepository.findAll().stream().map(i -> PurchaseOrderItemsDto.builder()
-				.orderItemId(i.getOrderItemId()).quantity(i.getQuantity())
-				.unitPrice(i.getUnitPrice())
-				.orderId(i.getPurchaseOrder().getOrderId()). 
-				itemName(i.getInventoryItem().getItemName()).build())
+		return purchaseOrderItemRepository.findAll().stream()
+				.map(i -> PurchaseOrderItemsDto.builder().orderItemId(i.getOrderItemId()).quantity(i.getQuantity())
+						.unitPrice(i.getUnitPrice()).orderId(i.getPurchaseOrder().getOrderId())
+						.itemName(i.getInventoryItem().getItemName()).build())
 				.toList();
 	}
 
@@ -283,12 +281,12 @@ public class InventoryServiceImple implements InventoryService {
 
 	@Override
 	public String adminAdd(AdminDto dto) {
-		Optional<Admin> optional=adminRepository.findByEmail(dto.getEmail());
-		if(!optional.isPresent()) {
-			Admin admin=ObjectUtils.itemsDtoToEntity(dto);
+		Optional<Admin> optional = adminRepository.findByEmail(dto.getEmail());
+		if (!optional.isPresent()) {
+			Admin admin = ObjectUtils.itemsDtoToEntity(dto);
 			admin.setAdmin(true);
 			adminRepository.save(admin);
-			
+
 			return admin.getEmail();
 		}
 		throw new NoUserFoundException("admin_ALready_FOUND");
@@ -297,13 +295,11 @@ public class InventoryServiceImple implements InventoryService {
 	@Override
 	public String adminLogin(AdminDto dto) {
 		Optional<Admin> optional = adminRepository.findByEmail(dto.getEmail());
-		if (optional.isPresent()) {
-		Admin admin = optional.get();
+		if(optional.isPresent()) {
+			Admin admin = optional.get();
 			if (admin.getPassword().equals(dto.getPassword())) {
 
 				return "email and password matches!!";
-
-				
 
 			} else {
 				return "Incorrect password";
@@ -311,4 +307,17 @@ public class InventoryServiceImple implements InventoryService {
 		}
 		throw new NoUserFoundException(INVALID_USER_NAME_AND_PASSWORD);
 	}
+
+	@Override
+	public PurchaseOrderItemsDto updatePurchaseorderItemDto(PurchaseOrderItemsDto dto) {
+		Optional<PurchaseOrderItems> optional = purchaseOrderItemRepository.findByOrderItemId(dto.getOrderItemId());
+		if(optional.isPresent()) {
+			PurchaseOrderItems orderItems = optional.get();
+			orderItems = ObjectUtils.updateValues(orderItems, dto);
+			PurchaseOrderItems save = purchaseOrderItemRepository.save(orderItems);
+			return ObjectUtils.orderItemsEntityToDto(save);
+		}
+		throw new NoUserFoundException("NO_ORDERITEM_ID_FOUND");
+	}
+
 }

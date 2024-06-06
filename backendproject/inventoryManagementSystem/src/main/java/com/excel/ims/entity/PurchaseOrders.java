@@ -38,7 +38,7 @@ public class PurchaseOrders {
     private LocalDate createdAt;
 
     @JoinColumn(name="User_id")
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.PERSIST.REFRESH.MERGE.DETACH, fetch = FetchType.EAGER)
     private User userTable;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "purchaseOrder")

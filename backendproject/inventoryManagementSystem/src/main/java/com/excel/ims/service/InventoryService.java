@@ -10,6 +10,7 @@ import com.excel.ims.dto.PurchaseOrderItemsListDto;
 import com.excel.ims.dto.PurchaseOrderListDto;
 import com.excel.ims.dto.UserDto;
 import com.excel.ims.entity.InventoryItems;
+import com.excel.ims.entity.PurchaseOrderItems;
 
 public interface InventoryService {
 
@@ -17,7 +18,7 @@ public interface InventoryService {
 
 	String userLogin(UserDto dto);
 
-	public UserDto userGet(UserDto dto);
+	public UserDto userGet(String email);
 
 	UserDto updateUser(UserDto dto);
 
@@ -27,7 +28,7 @@ public interface InventoryService {
 
 	Integer orderItemsAdd(PurchaseOrderItemsListDto dto);
 
-	InventoryItemsDto inventoryItemGet(InventoryItems dto);
+	InventoryItemsDto inventoryItemGet(Integer itemId);
 
 	InventoryItemsDto updateInventoryItems(InventoryItems dto);
 
@@ -51,6 +52,9 @@ public interface InventoryService {
 
 	String adminLogin(AdminDto dto);
 
+	PurchaseOrderItemsDto updatePurchaseorderItemDto(PurchaseOrderItemsDto dto);
+
+	
 
 
 

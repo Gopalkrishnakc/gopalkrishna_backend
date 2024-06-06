@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.excel.ims.commomrespose.CommonResponse;
@@ -48,8 +49,8 @@ public class InventroryController {
 	}
 
 	@GetMapping(path = "/user/get")
-	ResponseEntity<CommonResponse<UserDto>> userGet(@RequestBody UserDto dto) {
-		UserDto userfetch = inventoryService.userGet(dto);
+	ResponseEntity<CommonResponse<UserDto>> userGet(@RequestParam(name="email")String email) {
+		UserDto userfetch = inventoryService.userGet(email);
 		return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<UserDto>builder().data(userfetch)
 				.message("fetchinig  Successfull").isError(false).build());
 	}
@@ -93,6 +94,7 @@ public class InventroryController {
 		return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<String>builder()
 				.isError(false).data(orderDelete).message("USER_DELETED_SUCCESS").build());
 	}
+	
 	@PutMapping(path = "/orderlist/put")
 	public ResponseEntity<CommonResponse<PurchaseOrderDto>> updateOrder(@RequestBody PurchaseOrderDto dto) {
 		PurchaseOrderDto updatedorder = inventoryService.updateOrder(dto);
@@ -107,8 +109,8 @@ public class InventroryController {
 	}
 	
 	@GetMapping(path = "/inventory/get")
-	ResponseEntity<CommonResponse<InventoryItemsDto>> inventoryItemGet(@RequestBody InventoryItems dto) {
-		InventoryItemsDto inventoryItemfetch = inventoryService.inventoryItemGet(dto);
+	ResponseEntity<CommonResponse<InventoryItemsDto>> inventoryItemGet(@RequestParam(name="itemId") Integer itemId) {
+		InventoryItemsDto inventoryItemfetch = inventoryService.inventoryItemGet(itemId);
 		return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<InventoryItemsDto>builder().data(inventoryItemfetch)
 				.message("fetchinig  Successfull").isError(false).build());
 	}
@@ -144,6 +146,12 @@ public class InventroryController {
 		List<PurchaseOrderItemsDto> orderitems=inventoryService.getAllOrdersItems();
 		return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<List<PurchaseOrderItemsDto>>builder().data(orderitems)
 				 .isError(false).message("ALL_ORDERSITEMS_FETCHED_SUCCESSFULLY").build());
+	}
+	@PutMapping(path = "/purchaseItems/put")
+	ResponseEntity<CommonResponse<PurchaseOrderItemsDto>> updatePurchaseorderItemDto(@RequestBody PurchaseOrderItemsDto dto){
+		PurchaseOrderItemsDto updatedPurchaseItem=inventoryService. updatePurchaseorderItemDto(dto);
+		return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<PurchaseOrderItemsDto>builder()
+				.message("updated success").data(updatedPurchaseItem).isError(false).build());
 	}
 	@PostMapping(path = "/admin")
 	ResponseEntity<CommonResponse<String>> adminAdd(@RequestBody AdminDto dto) {

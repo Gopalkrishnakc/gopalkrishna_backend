@@ -104,6 +104,19 @@ public class ObjectUtils {
 		
 	}
 
+	public static PurchaseOrderItems updateValues(PurchaseOrderItems orderItems, PurchaseOrderItemsDto dto) {
+		 	orderItems.setQuantity(dto.getQuantity());
+		 	orderItems.setUnitPrice(dto.getUnitPrice());
+		return orderItems;
+	}
+
+	public static PurchaseOrderItemsDto orderItemsEntityToDto(PurchaseOrderItems save) {
+	
+		return PurchaseOrderItemsDto.builder().orderItemId(save.getOrderItemId())
+				.unitPrice(save.getUnitPrice()).quantity(save.getQuantity()).build();
+	}
+
+	
 }
 
 

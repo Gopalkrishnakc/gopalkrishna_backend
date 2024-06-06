@@ -38,7 +38,7 @@ public class User {
 	private boolean isAdmin;
 	private LocalDate createdAt;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "userTable")
+	@OneToMany(cascade = CascadeType.MERGE.PERSIST.REFRESH.DETACH, fetch = FetchType.EAGER, mappedBy = "userTable")
 	private List<PurchaseOrders> purchaseOrders;
 	 @PrePersist
 	    protected void onCreate() {
