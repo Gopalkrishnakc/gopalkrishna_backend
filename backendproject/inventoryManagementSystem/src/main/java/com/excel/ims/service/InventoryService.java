@@ -50,9 +50,11 @@ public interface InventoryService {
 
 	String adminAdd(AdminDto dto);
 
-	String adminLogin(AdminDto dto);
+	AdminDto adminLogin(AdminDto dto);
 
 	PurchaseOrderItemsDto updatePurchaseorderItemDto(PurchaseOrderItemsDto dto);
+
+	InventoryItemsDto incrementInventoryItems(InventoryItems dto);
 
 	
 

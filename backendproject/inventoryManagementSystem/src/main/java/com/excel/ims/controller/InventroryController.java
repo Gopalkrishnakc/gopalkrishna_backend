@@ -50,7 +50,8 @@ public class InventroryController {
 
 	@GetMapping(path = "/user/get")
 	ResponseEntity<CommonResponse<UserDto>> userGet(@RequestParam(name="email")String email) {
-		UserDto userfetch = inventoryService.userGet(email);
+		UserDto userfetch = inventoryService.userGet(email)
+;
 		return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<UserDto>builder().data(userfetch)
 				.message("fetchinig  Successfull").isError(false).build());
 	}
@@ -161,13 +162,10 @@ public class InventroryController {
 	}
 	
 	@PostMapping(path = "/admin/login")
-	ResponseEntity<CommonResponse<String>> adminLogin(@RequestBody  AdminDto dto) {
-		String adminAdded = inventoryService.adminLogin(dto);
+	ResponseEntity<CommonResponse< AdminDto>> adminLogin(@RequestBody  AdminDto dto) {
+		 AdminDto adminAdded = inventoryService.adminLogin(dto);
 		return ResponseEntity.status(HttpStatus.OK).body(
-				CommonResponse.<String>builder().data(adminAdded).message("Login Successfull").isError(false).build());
+				CommonResponse.< AdminDto>builder().data(adminAdded).message("Login Successfull").isError(false).build());
 	}
 
 }
-
-
-

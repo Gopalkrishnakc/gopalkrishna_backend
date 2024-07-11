@@ -25,6 +25,9 @@ import com.excel.ims.repository.PurchaseOrderItemsRepository;
 import com.excel.ims.repository.PurchaseOrderRepository;
 import com.excel.ims.repository.UserRepository;
 import com.excel.ims.utils.ObjectUtils;
+
+
+
 import static com.excel.ims.constant.InventoryConstants.USER_ALREDY_FOUND;
 import static com.excel.ims.constant.InventoryConstants.INVALID_USER_NAME_AND_PASSWORD;
 import static com.excel.ims.constant.InventoryConstants.NO_USER_FOUND;
@@ -293,16 +296,16 @@ public class InventoryServiceImple implements InventoryService {
 	}
 
 	@Override
-	public String adminLogin(AdminDto dto) {
+	public AdminDto adminLogin(AdminDto dto) {
 		Optional<Admin> optional = adminRepository.findByEmail(dto.getEmail());
 		if(optional.isPresent()) {
 			Admin admin = optional.get();
 			if (admin.getPassword().equals(dto.getPassword())) {
-
-				return "email and password matches!!";
+				return AdminDto.builder().adminame(admin.getAdminame())
+						.email(admin.getEmail()).build();
 
 			} else {
-				return "Incorrect password";
+				throw new NoUserFoundException(INVALID_USER_NAME_AND_PASSWORD);
 			}
 		}
 		throw new NoUserFoundException(INVALID_USER_NAME_AND_PASSWORD);
@@ -318,6 +321,14 @@ public class InventoryServiceImple implements InventoryService {
 			return ObjectUtils.orderItemsEntityToDto(save);
 		}
 		throw new NoUserFoundException("NO_ORDERITEM_ID_FOUND");
+	}
+
+	@Override
+	public InventoryItemsDto incrementInventoryItems(InventoryItems dto) {
+		Optional<InventoryItems> optional = inventoryRepository.findByItemId(dto.getItemId());
+//		Optional<Optional<PurchaseOrderItems> optional = purchaseOrderItemRepository.findByOrderItemId(dto.getOrderItemId());>
+		
+		return null;
 	}
 
 }
