@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,8 +38,11 @@ public class CustomerServiceImplementation implements CustomerService {
 					.findByCustomerId(dto.getCustomerId());
 			if (!optional.isPresent()) {
 				CustomerInformation customer = UtilsObject.dtoToEntity(dto);
+
 				customer.setPassword(passwordEncoder.encode(dto.getPassword()));
+
 				customerInformationRepository.save(customer);
+
 				return customer.getEmail();
 			}
 		} catch (Exception e) {
@@ -46,6 +52,7 @@ public class CustomerServiceImplementation implements CustomerService {
 	}
 
 	@Override
+	@Cacheable(value = "customerCache", key = "{#customerPhone, #customerId, #email, #customerName, #customerAge}")
 	public List<CustomerInformationDto> getAllCustomers(String customerPhone, Integer customerId, String email,
 			String customerName, Integer customerAge) {
 
@@ -59,7 +66,7 @@ public class CustomerServiceImplementation implements CustomerService {
 			return customers.stream()
 					.map(o -> CustomerInformationDto.builder().customerName(o.getCustomerName())
 							.customerAge(o.getCustomerAge()).customerPhone(o.getCustomerPhone()).email(o.getEmail())
-							.customerId(o.getCustomerId()).build())
+							.customerId(o.getCustomerId()).roles(o.getRoles()).build())
 					.toList();
 
 		}
@@ -67,6 +74,7 @@ public class CustomerServiceImplementation implements CustomerService {
 	}
 
 	@Override
+	@Cacheable(value = "customer", key = "#dto.customerPhone + '-' + #dto.customerId + '-' + #dto.email + '-' + #dto.customerName + '-' + #dto.customerAge")
 	public CustomerInformationDto getbyId(CustomerInformationDto dto) {
 		Optional<CustomerInformation> optional = customerInformationRepository
 				.findByCustomerPhoneOrCustomerIdOrEmailOrCustomerAge(dto.getCustomerPhone(), dto.getCustomerId(),
@@ -79,6 +87,7 @@ public class CustomerServiceImplementation implements CustomerService {
 	}
 
 	@Override
+	@CacheEvict(value = "customerCache", key = "#dto.customerId",allEntries = true)
 	public String deleteCustomer(CustomerInformationDto dto) {
 		Optional<CustomerInformation> optional = customerInformationRepository.findByCustomerId(dto.getCustomerId());
 		if (optional.isPresent()) {
@@ -90,11 +99,13 @@ public class CustomerServiceImplementation implements CustomerService {
 	}
 
 	@Override
+	@CachePut(value = "customerCache", key = "#dto.customerId")
 	public CustomerInformationDto updateCustomer(CustomerInformationDto dto) {
 		Optional<CustomerInformation> optional = customerInformationRepository.findByCustomerId(dto.getCustomerId());
 		if (optional.isPresent()) {
 			CustomerInformation customer = optional.get();
 			customer = UtilsObject.updateCustomer(customer, dto);
+			customer.setPassword(passwordEncoder.encode(dto.getPassword()));
 			CustomerInformation customer1 = customerInformationRepository.save(customer);
 			return UtilsObject.entityToDTo(customer1);
 

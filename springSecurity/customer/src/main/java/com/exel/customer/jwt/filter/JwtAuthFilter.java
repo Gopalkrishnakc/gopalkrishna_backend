@@ -1,5 +1,7 @@
 package com.exel.customer.jwt.filter;
 
+import static com.exel.customer.constants.CustomerConstants.TOKEN_NOT_VALIDATED_OR_TOKEN_EXPIRED;
+
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.exel.customer.exception.CustomerNotFoundException;
 import com.exel.customer.security.config.CustomerInfoDetailsService;
 import com.exel.customer.service.JwtService;
 
@@ -32,33 +35,30 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 			throws ServletException, IOException {
 
 		String authHeader = request.getHeader("Authorization");
-		System.out.println("filter JWT Auth "+ authHeader);
+		System.out.println("filter JWT Auth " + authHeader);
 		String token = null;
 		String username = null;
 		if (authHeader != null && authHeader.startsWith("Bearer")) {
 			token = authHeader.substring(7);
 			username = jwtService.extractUsername(token);
 		}
-
-		if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+			
+		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 			UserDetails userDetails = customerInfoDetailsService.loadUserByUsername(username);
 			if (jwtService.validateToken(token, userDetails)) {
 				UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
 						userDetails, null, userDetails.getAuthorities());
 				authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-				System.out.println("This is authenticationToken "+  authenticationToken);
+				System.out.println("This is authenticationToken " + authenticationToken);
 				SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+			}
+			else {
+				throw new CustomerNotFoundException(TOKEN_NOT_VALIDATED_OR_TOKEN_EXPIRED);
 			}
 
 		}
-		
+
 		filterChain.doFilter(request, response);
 	}
 
-//	@Override
-//	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-//			throws ServletException, IOException {
-//		// TODO Auto-generated method stub
-//		
-//	}
 }

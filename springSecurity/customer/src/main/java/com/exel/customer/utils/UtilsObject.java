@@ -15,7 +15,7 @@ public class UtilsObject {
 	public static CustomerInformation dtoToEntity(CustomerInformationDto dto) {
 		
 		return CustomerInformation.builder().customerAge(dto.getCustomerAge()).customerName(dto.getCustomerName())
-			.roles(dto.getRoles()).password(dto.getPassword()).customerPhone(dto.getCustomerPhone()).email(dto.getEmail()).build() ;
+			.roles(dto.getRoles()).customerPhone(dto.getCustomerPhone()).email(dto.getEmail()).build() ;
 	}
 
 	public static CustomerInformationDto entityToDTo(CustomerInformation customer) {

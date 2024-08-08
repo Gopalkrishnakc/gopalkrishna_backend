@@ -9,14 +9,20 @@ import org.springframework.data.repository.query.Param;
 
 import com.exel.customer.entity.CustomerInformation;
 
-public interface CustomerInformationRepository extends JpaRepository< CustomerInformation, Integer>{
-Optional< CustomerInformation> findByCustomerId(Integer customerId);
-Optional< CustomerInformation>findByEmail(String email);
-List<CustomerInformation> findByCustomerPhoneOrCustomerIdOrEmailOrCustomerNameOrCustomerAge(String customerPhone,Integer customerId,String email,String customerName,Integer customerAge);
+public interface CustomerInformationRepository extends JpaRepository<CustomerInformation, Integer> {
+	
+	Optional<CustomerInformation> findByCustomerId(Integer customerId);
 
-Optional<CustomerInformation> findByCustomerPhoneOrCustomerIdOrEmailOrCustomerAge(String customerPhone,
-		Integer customerId, String email, Integer customerAge);
+	Optional<CustomerInformation> findByEmail(String email);
 
-@Query("select c from CustomerInformation c where c.email=:email")
-CustomerInformation findByCustomerName(@Param("email") String email);
+	List<CustomerInformation> findByCustomerPhoneOrCustomerIdOrEmailOrCustomerNameOrCustomerAge(String customerPhone,
+			Integer customerId, String email, String customerName, Integer customerAge);
+
+	Optional<CustomerInformation> findByCustomerPhoneOrCustomerIdOrEmailOrCustomerAge(String customerPhone,
+			Integer customerId, String email, Integer customerAge);
+
+	@Query("select c from CustomerInformation c where c.email=:email")
+	CustomerInformation findByCustomerName(@Param("email") String email);
+	
+	
 }

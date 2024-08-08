@@ -12,4 +12,5 @@ private CustomerConstants() {}
  public static final String CUSTOMER_NOT_FOUND="No customer Found!!";
  public static final String CUSTOMER_ADDRESS_ADDED_SUCCESS=" customer Added Success!!";
  public static final String TOKEN_GENERATED_SUCCESS=" TOKEN_GENERATED_SUCCES!!";
+ public static final String TOKEN_NOT_VALIDATED_OR_TOKEN_EXPIRED=" TOKEN_GENERATED_IS_NOT_VALID_OR_EXPIRED!!";
 }

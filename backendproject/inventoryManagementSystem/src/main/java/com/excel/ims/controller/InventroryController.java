@@ -31,16 +31,17 @@ import com.excel.ims.service.InventoryService;
 @CrossOrigin
 @RequestMapping(path = "/api/v1/inventory", method = { RequestMethod.POST, RequestMethod.PUT })
 public class InventroryController {
+	
 	@Autowired
 	private InventoryService inventoryService;
 
 	@PostMapping(path = "/user/register")
-	ResponseEntity<CommonResponse<String>> addUserInfo(@RequestBody UserDto dto) {
+	public ResponseEntity<CommonResponse<String>> addUserInfo(@RequestBody UserDto dto) {
 		String userAdded = inventoryService.addUserInfo(dto);
 		return ResponseEntity.status(HttpStatus.OK).body(
 				CommonResponse.<String>builder().data(userAdded).message("User_INFO_SAVED").isError(false).build());
 	}
-
+	
 	@PostMapping(path = "/user/login")
 	ResponseEntity<CommonResponse<String>> userLogin(@RequestBody UserDto dto) {
 		String userAdded = inventoryService.userLogin(dto);
@@ -50,8 +51,7 @@ public class InventroryController {
 
 	@GetMapping(path = "/user/get")
 	ResponseEntity<CommonResponse<UserDto>> userGet(@RequestParam(name="email")String email) {
-		UserDto userfetch = inventoryService.userGet(email)
-;
+		UserDto userfetch = inventoryService.userGet(email);
 		return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<UserDto>builder().data(userfetch)
 				.message("fetchinig  Successfull").isError(false).build());
 	}
@@ -63,13 +63,13 @@ public class InventroryController {
 				.isError(false).message("USER_UPDATE_SUCCESS").build());
 	}
 	@GetMapping(path = "/user/getall")
-	ResponseEntity<CommonResponse<List<UserDto>>> userGetAll(){
+	public ResponseEntity<CommonResponse<List<UserDto>>> userGetAll(){
 		List<UserDto> allUsers=inventoryService.userGetAll();
 		return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<List<UserDto>>builder().data(allUsers)
 				 .isError(false).message("ALL_USERS_FETCHED_SUCCESSFULLY").build());
 	}
 	@DeleteMapping(path = "/user/delete")
-	ResponseEntity<CommonResponse<String>> deleteUser(@RequestBody UserDto dto){
+	public ResponseEntity<CommonResponse<String>> deleteUser(@RequestBody UserDto dto){
 		String userDelete=inventoryService.deleteUser(dto);
 		return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<String>builder()
 				.isError(false).data(userDelete).message("USER_DELETED_SUCCESS").build());
@@ -77,20 +77,20 @@ public class InventroryController {
 	
 	@CrossOrigin("*")
 	@PostMapping(path = "/orderlist")
-	ResponseEntity<CommonResponse<String>> orderAdd(@RequestBody PurchaseOrderListDto dto) {
+	public ResponseEntity<CommonResponse<String>> orderAdd(@RequestBody PurchaseOrderListDto dto) {
 		System.out.println(dto.getEmail());
 		String orderAdded = inventoryService.orderAdd(dto);
 		return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<String>builder().data(orderAdded)
 				.message("ordersAdded Successfull").isError(false).build());
 	}
 	@GetMapping(path = "/orderlist/getall")
-	  ResponseEntity<CommonResponse<List<PurchaseOrderDto>>> getAllOrders(){
+	public  ResponseEntity<CommonResponse<List<PurchaseOrderDto>>> getAllOrders(){
 		List<PurchaseOrderDto> orders=inventoryService.getALLorders();
 		return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<List<PurchaseOrderDto>>builder()
 				.isError(false).message("List Orders Fetched Sucessfully").data(orders).build());
 	}
 	@DeleteMapping(path = "/orderlist/delete")
-	ResponseEntity<CommonResponse<String>> deleteOrders(@RequestBody PurchaseOrderDto dto){
+	public ResponseEntity<CommonResponse<String>> deleteOrders(@RequestBody PurchaseOrderDto dto){
 		String orderDelete=inventoryService.deleteOrders(dto);
 		return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<String>builder()
 				.isError(false).data(orderDelete).message("USER_DELETED_SUCCESS").build());

@@ -1,19 +1,20 @@
 package com.excel.ims.dto;
 import java.time.LocalDate;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
 @Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class UserDto {
-	private Integer userId;
+	private Integer Id;
 	private String username;
 	private String email;
 	private String password;

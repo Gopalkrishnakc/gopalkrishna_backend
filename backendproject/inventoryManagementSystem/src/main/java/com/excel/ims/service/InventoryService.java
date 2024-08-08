@@ -2,6 +2,8 @@ package com.excel.ims.service;
 
 import java.util.List;
 
+
+
 import com.excel.ims.dto.AdminDto;
 import com.excel.ims.dto.InventoryItemsDto;
 import com.excel.ims.dto.PurchaseOrderDto;
@@ -10,7 +12,6 @@ import com.excel.ims.dto.PurchaseOrderItemsListDto;
 import com.excel.ims.dto.PurchaseOrderListDto;
 import com.excel.ims.dto.UserDto;
 import com.excel.ims.entity.InventoryItems;
-import com.excel.ims.entity.PurchaseOrderItems;
 
 public interface InventoryService {
 

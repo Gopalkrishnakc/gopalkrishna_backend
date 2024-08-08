@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.List;
+
 import com.exel.customer.commonresponse.CommonResponse;
 import com.exel.customer.dto.AddressListDto;
 import com.exel.customer.dto.CustomerInformationDto;
@@ -21,6 +21,12 @@ import com.exel.customer.dto.JwtAuthRequestDto;
 import com.exel.customer.exception.CustomerNotFoundException;
 import com.exel.customer.service.CustomerService;
 import com.exel.customer.service.JwtService;
+
+import java.util.List;
+
+
+import jakarta.validation.Valid;
+
 import static com.exel.customer.constants.CustomerConstants.CUSTOMER_DATA_ADDED_SUCCESS;
 import static com.exel.customer.constants.CustomerConstants.TOKEN_GENERATED_SUCCESS;
 import static com.exel.customer.constants.CustomerConstants.CUSTOMER_DATA_FETCHED_SUCCESS;
@@ -29,9 +35,13 @@ import static com.exel.customer.constants.CustomerConstants.CUSTOMER_NOT_FOUND;
 import static com.exel.customer.constants.CustomerConstants.CUSTOMER_DATA_DELETED_SUCCESS;
 import static com.exel.customer.constants.CustomerConstants.CUSTOMERS_DATA_FETCHED_SUCCESS;
 import static com.exel.customer.constants.CustomerConstants.CUSTOMER_ADDRESS_ADDED_SUCCESS;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.security.core.Authentication;
+
+@CrossOrigin
 @RestController
 @RequestMapping(path = "/api", method = { RequestMethod.POST, RequestMethod.PUT })
 public class CustomerController {
@@ -44,13 +54,13 @@ public class CustomerController {
 	private AuthenticationManager authenticationManager;
 
 	@PostMapping("/customer")
-	public ResponseEntity<CommonResponse<String>> addCustomerDetails(@RequestBody CustomerInformationDto dto) {
+	public ResponseEntity<CommonResponse<String>> addCustomerDetails(@Valid @RequestBody CustomerInformationDto dto) {
 		String savedCustomerData = customerService.addCustomerDetails(dto);
 		return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<String>builder().data(savedCustomerData)
 				.isError(false).message(CUSTOMER_DATA_ADDED_SUCCESS).build());
 	}
 
-	 @PreAuthorize("hasAuthority('USER')")
+	@PreAuthorize("hasAuthority('USER')")
 	@GetMapping("/customer/getall")
 	public ResponseEntity<CommonResponse<List<CustomerInformationDto>>> getAllCustomers(
 			@RequestParam(required = false, defaultValue = "") Integer customerAge,
@@ -64,7 +74,7 @@ public class CustomerController {
 				.data(allCustomers).isError(false).message(CUSTOMERS_DATA_FETCHED_SUCCESS).build());
 	}
 
-	 @PreAuthorize("hasAuthority('USER')")
+	@PreAuthorize("hasAuthority('USER')")
 	@GetMapping("/customer/get")
 	public ResponseEntity<CommonResponse<CustomerInformationDto>> getbyId(
 			@RequestBody @RequestParam(required = false, defaultValue = "") Integer customerId,
@@ -104,9 +114,9 @@ public class CustomerController {
 	public ResponseEntity<CommonResponse<String>> authenticateAndGetToken(@RequestBody JwtAuthRequestDto dto) {
 		Authentication authentication = authenticationManager
 				.authenticate(new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword()));
-		
+
 		if (authentication.isAuthenticated()) {
-			System.out.println("I'm in Controller!!");
+			System.out.println(" Controller!!");
 			String tokens = jwtService.generateToken(dto.getUsername());
 			return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.<String>builder().isError(false)
 					.message(TOKEN_GENERATED_SUCCESS).data(tokens).build());

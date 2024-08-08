@@ -26,7 +26,7 @@ public class ObjectUtils {
 
 	public static UserDto userEntityToDto(User user) {
 	
-		return UserDto.builder().userId(user.getUserId())
+		return UserDto.builder()
 				.username(user.getUsername()).email(user.getEmail())
 				.createdAt(user.getCreatedAt()).password(user.getPassword()).isAdmin(user.isAdmin()).build();
 	}

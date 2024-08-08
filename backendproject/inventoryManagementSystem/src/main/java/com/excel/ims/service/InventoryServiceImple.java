@@ -42,6 +42,7 @@ import static com.excel.ims.constant.InventoryConstants.NO_ITEMS_FOUND;
 
 @Service
 public class InventoryServiceImple implements InventoryService {
+	
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
@@ -56,10 +57,12 @@ public class InventoryServiceImple implements InventoryService {
 	@Override
 	public String addUserInfo(UserDto dto) {
 		try {
-			if (!userRepository.findByEmail(dto.getEmail()).isPresent()) {
+			Optional<User> optional = userRepository.findByEmail(dto.getEmail());
+			if (optional.isEmpty()) { 
 				User user = ObjectUtils.userDtoToEntitiy(dto);
-				user.setAdmin(false);
+ 				user.setAdmin(false);
 				userRepository.save(user);
+				System.out.println(user.getEmail());
 				return user.getEmail();
 			}
 		} catch (Exception e) {
@@ -100,7 +103,7 @@ public class InventoryServiceImple implements InventoryService {
 		try {
 			return userRepository.findAll().stream()
 					.map(u -> UserDto.builder().email(u.getEmail()).createdAt(u.getCreatedAt())
-							.password(u.getPassword()).userId(u.getUserId()).username(u.getUsername()).build())
+							.password(u.getPassword()).username(u.getUsername()).build())
 					.toList();
 		} catch (Exception e) {
 
@@ -123,6 +126,7 @@ public class InventoryServiceImple implements InventoryService {
 	@Override
 	public String deleteUser(UserDto dto) {
 		Optional<User> optional = userRepository.findByEmail(dto.getEmail());
+		System.out.println(dto.getEmail());
 		if (optional.isPresent()) {
 			User get = optional.get();
 			userRepository.delete(get);
@@ -325,7 +329,7 @@ public class InventoryServiceImple implements InventoryService {
 
 	@Override
 	public InventoryItemsDto incrementInventoryItems(InventoryItems dto) {
-		Optional<InventoryItems> optional = inventoryRepository.findByItemId(dto.getItemId());
+//		Optional<InventoryItems> optional = inventoryRepository.findByItemId(dto.getItemId());
 //		Optional<Optional<PurchaseOrderItems> optional = purchaseOrderItemRepository.findByOrderItemId(dto.getOrderItemId());>
 		
 		return null;

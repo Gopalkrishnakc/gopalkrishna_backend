@@ -2,6 +2,9 @@ package com.exel.customer.entity;
 
 
 
+
+
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -21,7 +24,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
 @Entity
 public class Address {
 	@Id
